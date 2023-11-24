@@ -15,7 +15,7 @@
     config.category = AVAudioSessionCategoryPlayAndRecord;
     config.categoryOptions =
         AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-
+    config.mode = AVAudioSessionModeVoiceChat;
     [session lockForConfiguration];
     NSError* error = nil;
     bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
@@ -27,7 +27,9 @@
     [session unlockForConfiguration];
   } else if (!recording && (session.category == AVAudioSessionCategoryAmbient ||
                             session.category == AVAudioSessionCategorySoloAmbient)) {
-    config.mode = AVAudioSessionCategoryPlayAndRecord;
+    config.category = AVAudioSessionCategoryPlayAndRecord;
+    config.categoryOptions = 0;
+    config.mode = AVAudioSessionModeDefault;
     [session lockForConfiguration];
     NSError* error = nil;
     bool success = [session setMode:config.mode error:&error];
