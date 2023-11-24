@@ -27,7 +27,7 @@
     [session unlockForConfiguration];
   } else if (!recording && (session.category == AVAudioSessionCategoryAmbient ||
                             session.category == AVAudioSessionCategorySoloAmbient)) {
-    config.mode = AVAudioSessionModeVoiceChat;
+    config.mode = AVAudioSessionCategoryPlayAndRecord;
     [session lockForConfiguration];
     NSError* error = nil;
     bool success = [session setMode:config.mode error:&error];
