@@ -10,12 +10,25 @@
   // this method is called
   RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
   // require audio session to be either PlayAndRecord or MultiRoute
+  config.category = AVAudioSessionCategoryPlayAndRecord;
+  config.categoryOptions = 
+        AVAudioSessionCategoryOptionDefaultToSpeaker |
+        AVAudioSessionCategoryPlayAndRecord |
+        AVAudioSessionCategoryOptionMixWithOthers |
+        AVAudioSessionCategoryOptionAllowBluetooth | 
+        AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+  config.mode = AVAudioSessionModeDefault;
   if (recording && session.category != AVAudioSessionCategoryPlayAndRecord &&
       session.category != AVAudioSessionCategoryMultiRoute) {
-    config.category = AVAudioSessionCategoryPlayAndRecord;
-    config.categoryOptions =
-        AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-    config.mode = AVAudioSessionModeVoiceChat;
+    // config.category = AVAudioSessionCategoryPlayAndRecord;
+    // config.categoryOptions = 
+    //     AVAudioSessionCategoryOptionDefaultToSpeaker |
+    //     AVAudioSessionCategoryPlayAndRecord |
+    //     AVAudioSessionCategoryOptionMixWithOthers |
+    //     AVAudioSessionCategoryOptionAllowBluetooth | 
+    //     AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+    // config.mode = AVAudioSessionModeDefault;
+    NSLog(@"[AUDIO]: 1 branch");
     [session lockForConfiguration];
     NSError* error = nil;
     bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
@@ -27,9 +40,15 @@
     [session unlockForConfiguration];
   } else if (!recording && (session.category == AVAudioSessionCategoryAmbient ||
                             session.category == AVAudioSessionCategorySoloAmbient)) {
-    config.category = AVAudioSessionCategoryPlayAndRecord;
-    config.categoryOptions = 0;
-    config.mode = AVAudioSessionModeDefault;
+    // config.category = AVAudioSessionCategoryPlayAndRecord;
+    // config.categoryOptions = 
+    //     AVAudioSessionCategoryOptionDefaultToSpeaker |
+    //     AVAudioSessionCategoryPlayAndRecord |
+    //     AVAudioSessionCategoryOptionMixWithOthers |
+    //     AVAudioSessionCategoryOptionAllowBluetooth | 
+    //     AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+    // config.mode = AVAudioSessionModeDefault;
+    NSLog(@"[AUDIO]: 2 branch");
     [session lockForConfiguration];
     NSError* error = nil;
     bool success = [session setMode:config.mode error:&error];
