@@ -866,8 +866,8 @@ void postEvent(FlutterEventSink sink, id _Nullable event) {
     [AudioUtils setAppleAudioConfiguration:configuration];
     result(nil);
   }
-  else if ([@"ensureAudioSession" isEqualToString:call.method]) {
-    [self ensureAudioSession];
+  else if ([@"enableEarspeaker" isEqualToString:call.method]) {
+    [AudioUtils enableEarspeaker];
   }
 #endif
   else if ([@"getLocalDescription" isEqualToString:call.method]) {

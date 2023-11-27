@@ -159,11 +159,9 @@ class Helper {
               preferSpeakerOutput: preferSpeakerOutput));
 
   /// Установка AudioSession для смены динамиков у уха/громкий на iOS
-  static Future<void> configureAudioSessionForSpeaker() async {
+  static Future<void> enableSpeaker() async {
     if (WebRTC.platformIsIOS) {
-      await WebRTC.invokeMethod(
-        'ensureAudioSession',
-      );
+      await WebRTC.invokeMethod('enableSpeaker');
     }
   }
 }

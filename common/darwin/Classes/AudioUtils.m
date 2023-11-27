@@ -2,6 +2,8 @@
 #import "AudioUtils.h"
 #import <AVFoundation/AVFoundation.h>
 
+static bool isEarspeakerOn = false;
+
 @implementation AudioUtils
 
 + (void)ensureAudioSessionWithRecording:(BOOL)recording {
@@ -10,6 +12,36 @@
   // this method is called
   RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
   // require audio session to be either PlayAndRecord or MultiRoute
+  if (recording && session.category != AVAudioSessionCategoryPlayAndRecord &&
+      session.category != AVAudioSessionCategoryMultiRoute) {
+    config.category = AVAudioSessionCategoryPlayAndRecord;
+    config.categoryOptions =
+        AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+
+    [session lockForConfiguration];
+    NSError* error = nil;
+    bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
+    if (!success)
+      NSLog(@"ensureAudioSessionWithRecording[true]: setCategory failed due to: %@", error);
+    success = [session setMode:config.mode error:&error];
+    if (!success)
+      NSLog(@"ensureAudioSessionWithRecording[true]: setMode failed due to: %@", error);
+    [session unlockForConfiguration];
+  } else if (!recording && (session.category == AVAudioSessionCategoryAmbient ||
+                            session.category == AVAudioSessionCategorySoloAmbient)) {
+    config.mode = AVAudioSessionModeDefault;
+    [session lockForConfiguration];
+    NSError* error = nil;
+    bool success = [session setMode:config.mode error:&error];
+    if (!success)
+      NSLog(@"ensureAudioSessionWithRecording[false]: setMode failed due to: %@", error);
+    [session unlockForConfiguration];
+  }
+}
+
++ (void)enableEarspeaker {
+  RTCAudioSession* session = [RTCAudioSession sharedInstance];
+  RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
   config.category = AVAudioSessionCategoryPlayAndRecord;
   config.categoryOptions = AVAudioSessionCategoryOptionDuckOthers |
                            AVAudioSessionCategoryOptionAllowBluetooth | 
@@ -19,11 +51,13 @@
   NSError* error = nil;
   bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
   if (!success)
-    NSLog(@"ensureAudioSessionWithRecording[true]: setCategory failed due to: %@", error);
+    NSLog(@"enableEarspeaker: setCategory failed due to: %@", error);
   success = [session setMode:config.mode error:&error];
   if (!success)
-    NSLog(@"ensureAudioSessionWithRecording[true]: setMode failed due to: %@", error);
+    NSLog(@"enableEarspeaker: setMode failed due to: %@", error);
   [session unlockForConfiguration];
+  isEarspeakerOn = true;
+  [AudioUtils setSpeakerphoneOn:false];
 }
 
 + (BOOL)selectAudioInput:(AVAudioSessionPort)type {
