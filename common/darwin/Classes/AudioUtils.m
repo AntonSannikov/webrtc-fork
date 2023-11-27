@@ -65,6 +65,9 @@ static bool isEarspeakerOn = false;
   success = [session setMode:config.mode error:&error];
   if (!success)
     NSLog(@"enableEarspeaker: setMode failed due to: %@", error);
+  BOOL activated = [session setActive:YES error:&error];
+  if (!activated)
+    NSLog(@"enableEarspeaker: Audio session override failed: %@", error);
   [session unlockForConfiguration];
 }
 
