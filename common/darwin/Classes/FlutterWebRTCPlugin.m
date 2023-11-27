@@ -866,6 +866,9 @@ void postEvent(FlutterEventSink sink, id _Nullable event) {
     [AudioUtils setAppleAudioConfiguration:configuration];
     result(nil);
   }
+  else if ([@"ensureAudioSession" isEqualToString:call.method]) {
+    [self ensureAudioSession];
+  }
 #endif
   else if ([@"getLocalDescription" isEqualToString:call.method]) {
     NSDictionary* argsMap = call.arguments;

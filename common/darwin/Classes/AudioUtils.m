@@ -12,48 +12,18 @@
   // require audio session to be either PlayAndRecord or MultiRoute
   config.category = AVAudioSessionCategoryPlayAndRecord;
   config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker |
-                           AVAudioSessionCategoryOptionMixWithOthers |
                            AVAudioSessionCategoryOptionAllowBluetooth | 
                            AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-  config.mode = AVAudioSessionModeDefault;
-  if (recording && session.category != AVAudioSessionCategoryPlayAndRecord &&
-      session.category != AVAudioSessionCategoryMultiRoute) {
-    // config.category = AVAudioSessionCategoryPlayAndRecord;
-    // config.categoryOptions = 
-    //     AVAudioSessionCategoryOptionDefaultToSpeaker |
-    //     AVAudioSessionCategoryPlayAndRecord |
-    //     AVAudioSessionCategoryOptionMixWithOthers |
-    //     AVAudioSessionCategoryOptionAllowBluetooth | 
-    //     AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-    // config.mode = AVAudioSessionModeDefault;
-    NSLog(@"[AUDIO]: 1 branch");
-    [session lockForConfiguration];
-    NSError* error = nil;
-    bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
-    if (!success)
-      NSLog(@"ensureAudioSessionWithRecording[true]: setCategory failed due to: %@", error);
-    success = [session setMode:config.mode error:&error];
-    if (!success)
-      NSLog(@"ensureAudioSessionWithRecording[true]: setMode failed due to: %@", error);
-    [session unlockForConfiguration];
-  } else if (!recording && (session.category == AVAudioSessionCategoryAmbient ||
-                            session.category == AVAudioSessionCategorySoloAmbient)) {
-    // config.category = AVAudioSessionCategoryPlayAndRecord;
-    // config.categoryOptions = 
-    //     AVAudioSessionCategoryOptionDefaultToSpeaker |
-    //     AVAudioSessionCategoryPlayAndRecord |
-    //     AVAudioSessionCategoryOptionMixWithOthers |
-    //     AVAudioSessionCategoryOptionAllowBluetooth | 
-    //     AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-    // config.mode = AVAudioSessionModeDefault;
-    NSLog(@"[AUDIO]: 2 branch");
-    [session lockForConfiguration];
-    NSError* error = nil;
-    bool success = [session setMode:config.mode error:&error];
-    if (!success)
-      NSLog(@"ensureAudioSessionWithRecording[false]: setMode failed due to: %@", error);
-    [session unlockForConfiguration];
-  }
+  config.mode = AVAudioSessionModeVoiceChat;
+  [session lockForConfiguration];
+  NSError* error = nil;
+  bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
+  if (!success)
+    NSLog(@"ensureAudioSessionWithRecording[true]: setCategory failed due to: %@", error);
+  success = [session setMode:config.mode error:&error];
+  if (!success)
+    NSLog(@"ensureAudioSessionWithRecording[true]: setMode failed due to: %@", error);
+  [session unlockForConfiguration];
 }
 
 + (BOOL)selectAudioInput:(AVAudioSessionPort)type {

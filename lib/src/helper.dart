@@ -157,4 +157,13 @@ class Helper {
       AppleNativeAudioManagement.setAppleAudioConfiguration(
           AppleNativeAudioManagement.getAppleAudioConfigurationForMode(mode,
               preferSpeakerOutput: preferSpeakerOutput));
+
+  /// Установка AudioSession для смены динамиков у уха/громкий на iOS
+  static Future<void> configureAudioSessionForSpeaker() async {
+    if (WebRTC.platformIsIOS) {
+      await WebRTC.invokeMethod(
+        'ensureAudioSession',
+      );
+    }
+  }
 }
