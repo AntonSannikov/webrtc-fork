@@ -161,7 +161,7 @@ class Helper {
   /// Установка AudioSession для смены динамиков у уха/громкий на iOS
   static Future<void> enableEarspeaker(bool enable) async {
     if (WebRTC.platformIsIOS) {
-      WebRTC.invokeMethod(
+      await WebRTC.invokeMethod(
         'enableEarspeaker',
         <String, dynamic>{'enable': enable},
       );
