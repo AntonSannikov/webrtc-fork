@@ -66,8 +66,6 @@ static bool isEarspeakerOn = false;
   if (!success)
     NSLog(@"enableEarspeaker: setMode failed due to: %@", error);
   [session unlockForConfiguration];
-  [AudioUtils ensureAudioSessionWithRecording:true];
-
 }
 
 + (BOOL)selectAudioInput:(AVAudioSessionPort)type {
