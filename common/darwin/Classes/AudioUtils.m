@@ -11,7 +11,7 @@
   RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
   // require audio session to be either PlayAndRecord or MultiRoute
   config.category = AVAudioSessionCategoryPlayAndRecord;
-  config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker |
+  config.categoryOptions = AVAudioSessionCategoryOptionDuckOthers |
                            AVAudioSessionCategoryOptionAllowBluetooth | 
                            AVAudioSessionCategoryOptionAllowBluetoothA2DP;
   config.mode = AVAudioSessionModeVoiceChat;
