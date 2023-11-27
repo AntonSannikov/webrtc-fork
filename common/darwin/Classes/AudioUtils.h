@@ -4,7 +4,7 @@
 
 @interface AudioUtils : NSObject
 + (void)ensureAudioSessionWithRecording:(BOOL)recording;
-+ (void)enableEarspeaker;
++ (void)enableEarspeaker:(BOOL)enable;
 // needed for wired headphones to use headphone mic
 + (BOOL)selectAudioInput:(AVAudioSessionPort)type;
 + (void)setSpeakerphoneOn:(BOOL)enable;

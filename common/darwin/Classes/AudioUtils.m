@@ -39,14 +39,24 @@ static bool isEarspeakerOn = false;
   }
 }
 
-+ (void)enableEarspeaker {
++ (void)enableEarspeaker:(BOOL)enable {
   RTCAudioSession* session = [RTCAudioSession sharedInstance];
   RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
   config.category = AVAudioSessionCategoryPlayAndRecord;
-  config.categoryOptions = AVAudioSessionCategoryOptionDuckOthers |
-                           AVAudioSessionCategoryOptionAllowBluetooth | 
-                           AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-  config.mode = AVAudioSessionModeVoiceChat;
+  if (enable) {
+    config.categoryOptions = AVAudioSessionCategoryOptionDuckOthers |
+                             AVAudioSessionCategoryOptionAllowBluetooth | 
+                             AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+    config.mode = AVAudioSessionModeVoiceChat;
+    [AudioUtils setSpeakerphoneOn:false];
+  } else {
+    config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker |
+                             AVAudioSessionCategoryOptionDuckOthers |
+                             AVAudioSessionCategoryOptionAllowBluetooth | 
+                             AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+    config.mode = AVAudioSessionModeVideoChat;
+    [AudioUtils setSpeakerphoneOn:true];
+  } 
   [session lockForConfiguration];
   NSError* error = nil;
   bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
@@ -56,8 +66,6 @@ static bool isEarspeakerOn = false;
   if (!success)
     NSLog(@"enableEarspeaker: setMode failed due to: %@", error);
   [session unlockForConfiguration];
-  isEarspeakerOn = true;
-  [AudioUtils setSpeakerphoneOn:false];
 }
 
 + (BOOL)selectAudioInput:(AVAudioSessionPort)type {

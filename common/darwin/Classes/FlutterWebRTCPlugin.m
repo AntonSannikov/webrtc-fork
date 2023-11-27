@@ -867,7 +867,10 @@ void postEvent(FlutterEventSink sink, id _Nullable event) {
     result(nil);
   }
   else if ([@"enableEarspeaker" isEqualToString:call.method]) {
-    [AudioUtils enableEarspeaker];
+    NSDictionary* argsMap = call.arguments;
+    NSNumber* enable = argsMap[@"enable"];
+    [AudioUtils enableEarspeaker: enable.boolValue];
+    result(nil);
   }
 #endif
   else if ([@"getLocalDescription" isEqualToString:call.method]) {
