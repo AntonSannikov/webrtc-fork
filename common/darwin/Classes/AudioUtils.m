@@ -48,14 +48,12 @@ static bool isEarspeakerOn = false;
                              AVAudioSessionCategoryOptionAllowBluetooth | 
                              AVAudioSessionCategoryOptionAllowBluetoothA2DP;
     config.mode = AVAudioSessionModeVoiceChat;
-    [AudioUtils setSpeakerphoneOn:false];
   } else {
     config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker |
                              AVAudioSessionCategoryOptionDuckOthers |
                              AVAudioSessionCategoryOptionAllowBluetooth | 
                              AVAudioSessionCategoryOptionAllowBluetoothA2DP;
     config.mode = AVAudioSessionModeVideoChat;
-    [AudioUtils setSpeakerphoneOn:true];
   } 
   [session lockForConfiguration];
   NSError* error = nil;
@@ -66,6 +64,11 @@ static bool isEarspeakerOn = false;
   if (!success)
     NSLog(@"enableEarspeaker: setMode failed due to: %@", error);
   [session unlockForConfiguration];
+  if (enable) {
+    [AudioUtils setSpeakerphoneOn:false];
+  } else {
+    [AudioUtils setSpeakerphoneOn:true];
+  }
 }
 
 + (BOOL)selectAudioInput:(AVAudioSessionPort)type {
